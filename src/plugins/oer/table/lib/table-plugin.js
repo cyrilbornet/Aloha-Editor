@@ -1,7 +1,7 @@
 define(
 ['aloha', 'aloha/plugin', 'jquery', 'ui/ui', 'ui/button', 'PubSub',
-    'ui/dialog', 'aloha/ephemera', 'table/table-create-layer', 'css!table/css/table.css'],
-function(Aloha, plugin, $, Ui, Button, PubSub, Dialog, Ephemera, CreateLayer) {
+    'ui/dialog', 'aloha/ephemera', 'table/table-create-layer', 'semanticblock/semanticblock-plugin', 'css!table/css/table.css'],
+function(Aloha, plugin, $, Ui, Button, PubSub, Dialog, Ephemera, CreateLayer, semanticBlock) {
     "use strict";
 
 	var GENTICS = window.GENTICS;
@@ -246,7 +246,21 @@ function(Aloha, plugin, $, Ui, Button, PubSub, Dialog, Ephemera, CreateLayer) {
                     plugin.currentTable = $();
                 }
             });
+
+            semanticBlock.register(this);
+
         },
+
+        selector: 'table',
+        activate: function($element) {
+            // var $parent = $element.wrap('<div class="aloha-ephemera-wrapper"></div>').parent();
+            // $parent.aloha();
+            $element.aloha();
+        },
+        deactivate: function($element) {
+            //$element.parent().mahalo();
+        },
+
         initButtons: function(){
             var that = this;
             this._createTableButton = Ui.adopt("createTable", Button, {
@@ -508,15 +522,17 @@ function(Aloha, plugin, $, Ui, Button, PubSub, Dialog, Ephemera, CreateLayer) {
                 table.appendChild(tbody);
 
                if ( $insertion && $insertion.length > 0 ) {
-                   $insertion.replaceWith($(table));
+                   //$insertion.replaceWith($(table));
+                   semanticBlock.insertAtCursor($(table).wrap('<div class="strip-me-PHIL"></div>').parent());
                }
                else {
                     prepareRangeContainersForInsertion(
                         Aloha.Selection.getRangeObject(), table);
                 
                     // insert the table at the current selection
-                    GENTICS.Utils.Dom.insertIntoDOM($(table),
-                        Aloha.Selection.getRangeObject(), Aloha.activeEditable.obj);
+                    // GENTICS.Utils.Dom.insertIntoDOM($(table),
+                    //     Aloha.Selection.getRangeObject(), Aloha.activeEditable.obj);
+                    semanticBlock.insertAtCursor($(table));
                 }
 
                 cleanupAfterInsertion();
