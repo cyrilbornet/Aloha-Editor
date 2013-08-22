@@ -523,7 +523,8 @@ function(Aloha, plugin, $, Ui, Button, PubSub, Dialog, Ephemera, CreateLayer, se
 
                if ( $insertion && $insertion.length > 0 ) {
                    //$insertion.replaceWith($(table));
-                   semanticBlock.insertAtCursor($(table).wrap('<div class="strip-me-PHIL"></div>').parent());
+                   semanticBlock.insertAtCursor($(table).wrap('<div class="aloha-ephemera-wrapper aloha-table-wrapper"></div>').parent());
+                   $insertion.remove();
                }
                else {
                     prepareRangeContainersForInsertion(
